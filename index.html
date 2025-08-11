@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Fishing Town</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<meta name="theme-color" content="#0ea5e9" />
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('service-worker.js');
+}
+</script>
+<style>
+body { background: #cceeff; text-align: center; font-family: sans-serif; }
+canvas { background: #99ddff; border: 2px solid #333; margin-top: 20px; }
+</style>
+</head>
+<body>
+<h1>Fishing Town</h1>
+<p>แตะปลาที่ว่ายน้ำเพื่อจับ!</p>
+<canvas id="gameCanvas" width="400" height="300"></canvas>
+<script>
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+let fishX = Math.random() * 350;
+let fishY = Math.random() * 250;
+let score = 0;
+
+function drawFish() {
+  ctx.fillStyle = 'orange';
+  ctx.beginPath();
+  ctx.ellipse(fishX, fishY, 15, 10, 0, Math.PI * 2);
+  ctx.fill();
+}
+
+function drawScore() {
+  ctx.fillStyle = 'black';
+  ctx.font = '16px Arial';
+  ctx.fillText('Score: ' + score, 10, 20);
+}
+
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  drawFish();
+  drawScore();
+}
+
+canvas.addEventListener('click', (e) => {
+  const rect = canvas.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+  if (x > fishX - 15 && x < fishX + 15 && y > fishY - 10 && y < fishY + 10) {
+    score++;
+    fishX = Math.random() * 350;
+    fishY = Math.random() * 250;
+  }
+});
+
+setInterval(draw, 30);
+</script>
+</body>
+</html>
